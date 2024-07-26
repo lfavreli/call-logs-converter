@@ -1,0 +1,29 @@
+### Eclipse ###
+.metadata
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.recommenders
+.project
+.classpath
+
+### Maven ###
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+### VS Code ###
+.vscode/
+.vscode-test
+
+# Dependency directories
+node_modules/
+
+### Logs ###
+logs
+*.log
