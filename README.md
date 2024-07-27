@@ -1,10 +1,8 @@
 # 📄 Phone Statement Converter
 
-Welcome to the Phone Statement Converter web server project! This application converts telephone statements in PDF format into CSV format. It showcases advanced Java and Spring ecosystem skills, providing a robust and scalable solution with an intuitive API.
+Welcome to my Phone Statement Converter demo project! 
 
-## 🚀 Project Overview
-
-The objective of this web server is to convert telephone statement PDFs into CSV files. It provides three main endpoints for users to upload PDFs, check conversion status, and download the converted CSVs.
+This application converts telephone statements in PDF format into CSV format, showcasing advanced Java and Spring ecosystem skills. It provides a robust and scalable solution with an intuitive API, offering three main endpoints for users to upload PDFs, check conversion status, and download the converted CSVs.
 
 ## 📑 Endpoints
 
@@ -37,15 +35,15 @@ The objective of this web server is to convert telephone statement PDFs into CSV
 
 ### Core Technologies
 
-- **Java 21**: Utilizes new features such as Pattern Matching for `instanceof`, Record Classes or Sequenced Collections.
-- **Spring Boot**: Provides a robust framework for building production-ready applications.
+- **Java 21**: Utilizes new features such as Pattern Matching for `instanceof`, Record and Sequenced Collections.
+- **Spring Boot**: Framework for building production-ready applications.
 - **Spring WebFlux & Reactor**: Enables asynchronous and non-blocking communication using reactive programming paradigms.
-- **Maven Wrapper**: Ensures consistent Maven versions across different environments for building and managing the project.
+- **Maven Wrapper**: Ensures consistent Maven versions across different environments for managing the project.
 
 ### Architecture
 
 - **Hexagonal Architecture**: Organizes the code using the ports and adapters pattern to separate concerns and improve testability and maintainability.
-- **Asynchronous Processing with SSE**: Utilizes Server-Sent Events (SSE) to notify users about the conversion status in real-time, leveraging the power of asynchronous communication.
+- **Asynchronous Processing with SSE**: Utilizes Server-Sent Events (SSE) to notify users about the conversion status in real-time by leveraging asynchronous communication.
 
 ### Reactive Components
 
@@ -64,7 +62,7 @@ Comprehensive integration and unit tests ensure the reliability and correctness 
 
 ### Logging
 
-- **SLF4J**: Simple Logging Facade for Java to ensure consistent logging throughout the application.
+- **SLF4J**: Logging facade to ensure consistent logging throughout the application.
 
 ### Dependencies
 
