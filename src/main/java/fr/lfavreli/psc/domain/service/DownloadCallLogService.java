@@ -1,4 +1,4 @@
-package fr.lfavreli.psc.domain.document.service;
+package fr.lfavreli.psc.domain.service;
 
 import java.util.UUID;
 
@@ -10,22 +10,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import org.springframework.web.server.ResponseStatusException;
 
-import fr.lfavreli.psc.domain.out.FilePort;
+import fr.lfavreli.psc.domain.spi.FilePort;
 import reactor.core.publisher.Mono;
 
 @Service
-public class DownloadDocumentService {
+public class DownloadCallLogService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DownloadDocumentService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DownloadCallLogService.class);
 
     private final FilePort filePort;
 
-    public DownloadDocumentService(FilePort filePort) {
+    public DownloadCallLogService(FilePort filePort) {
         this.filePort = filePort;
     }
 
     //
-    // GET /api/document/{documentId}/download
+    // GET /api/call-logs/{logId}/download
     //
     public Mono<ServerResponse> execute(Mono<UUID> documentId) {
         return documentId.flatMap(this::fetchDocument);

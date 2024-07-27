@@ -1,4 +1,4 @@
-package fr.lfavreli.psc.domain.in;
+package fr.lfavreli.psc.domain.api;
 
 import java.util.UUID;
 
@@ -7,12 +7,12 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 
 import reactor.core.publisher.Mono;
 
-public interface DocumentUseCasePort {
+public interface CallLogUseCasePort {
 
     public Mono<ServerResponse> convertToCsv(Mono<FilePart> filePart);
 
-    public Mono<ServerResponse> checkConversionStatus(Mono<UUID> documentId);
+    public Mono<ServerResponse> checkConversionStatus(Mono<UUID> callLogId);
 
-    public Mono<ServerResponse> downloadCsv(Mono<UUID> documentId);
+    public Mono<ServerResponse> downloadInCsv(Mono<UUID> callLogId);
 
 }

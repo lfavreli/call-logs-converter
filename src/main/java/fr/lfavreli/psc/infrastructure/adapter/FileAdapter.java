@@ -14,7 +14,7 @@ import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Component;
 
-import fr.lfavreli.psc.domain.out.FilePort;
+import fr.lfavreli.psc.domain.spi.FilePort;
 import fr.lfavreli.psc.infrastructure.CsvProcessor;
 import fr.lfavreli.psc.infrastructure.PdfProcessor;
 import reactor.core.publisher.Mono;

@@ -23,7 +23,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import fr.lfavreli.psc.application.DocumentAdapter;
+import fr.lfavreli.psc.application.CallLogAdapter;
 import fr.lfavreli.psc.config.ApiRouterConfig;
 
 @SpringBootTest(classes = PhoneStatementConverterApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -34,12 +34,12 @@ class PhoneStatementConverterApplicationTests {
     private ApiRouterConfig apiRouterConfig;
 
     @Autowired
-    private DocumentAdapter documentUseCases;
+    private CallLogAdapter callLogAdapter;
 
     @TempDir
     private static Path tempDir;
 
-    private static String documentId;
+    private static String callLogId;
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
@@ -49,36 +49,36 @@ class PhoneStatementConverterApplicationTests {
     @Test
     @Order(1)
     void testPostConvertDocument() {
-        ClassPathResource pdf = new ClassPathResource("sample-input-statement.pdf");
+        ClassPathResource pdf = new ClassPathResource("sample-call-log.pdf");
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", pdf, MediaType.APPLICATION_PDF);
 
-        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(documentUseCases))
+        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(callLogAdapter))
                 .build()
                 .post()
-                .uri("/api/documents")
+                .uri("/api/call-logs")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(String.class).value(res -> {
                     assertDoesNotThrow(() -> UUID.fromString(res), "Response body is not a valid UUID");
-                    documentId = res;
+                    callLogId = res;
                 });
     }
 
     @Test
     @Order(2)
     void testGetDocumentStatus() {
-        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(documentUseCases))
+        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(callLogAdapter))
                 .build()
                 .get()
-                .uri("/api/documents/" + documentId + "/status")
+                .uri("/api/call-logs/" + callLogId + "/status")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith(MediaType.TEXT_EVENT_STREAM)
                 .expectBody(String.class).value(res -> {
-                    assertTrue(res.contains(documentId), "DocumentId not found in the response");
+                    assertTrue(res.contains(callLogId), "DocumentId not found in the response");
                     assertTrue(res.contains("COMPLETED"), "Document status not completed");
                 });
     }
@@ -86,10 +86,10 @@ class PhoneStatementConverterApplicationTests {
     @Test
     @Order(3)
     void testGetDownloadDocument() {
-        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(documentUseCases))
+        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(callLogAdapter))
                 .build()
                 .get()
-                .uri("/api/documents/" + documentId + "/download")
+                .uri("/api/call-logs/" + callLogId + "/download")
                 .exchange()
                 .expectStatus().isOk()
                 .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_OCTET_STREAM)

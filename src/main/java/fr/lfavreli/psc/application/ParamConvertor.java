@@ -16,23 +16,26 @@ public class ParamConvertor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ParamConvertor.class);
 
-    public static Mono<UUID> toUUID(ServerRequest request, String pathVarName) {
+    public static final String FILE_FORM_DATA_NAME = "file";
+    public static final String CALL_LOG_ID_PATH_VAR = "callLogId";
+
+    public static Mono<UUID> toUUID(ServerRequest request) {
         return Mono.fromCallable(() -> {
-            String sDocumentId = request.pathVariable(pathVarName);
-            return UUID.fromString(sDocumentId);
-        }).onErrorMap(handleDocumentIdNotParsable());
+            String callLogId = request.pathVariable(CALL_LOG_ID_PATH_VAR);
+            return UUID.fromString(callLogId);
+        }).onErrorMap(handleCallLogIsNotParsable());
     }
 
-    private static UnaryOperator<Throwable> handleDocumentIdNotParsable() {
+    private static UnaryOperator<Throwable> handleCallLogIsNotParsable() {
         return ex -> {
-            LOGGER.error("Unable to parse the document identifier", ex);
-            return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid document identifier");
+            LOGGER.error("Unable to parse the call log identifier", ex);
+            return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid log identifier");
         };
     }
 
-    public static Mono<FilePart> toFilePart(ServerRequest request, String fileFormDataName) {
+    public static Mono<FilePart> toFilePart(ServerRequest request) {
         return request.multipartData()
-                .flatMap(multiValueMap -> Mono.justOrEmpty(multiValueMap.toSingleValueMap().get(fileFormDataName)))
+                .flatMap(multiValueMap -> Mono.justOrEmpty(multiValueMap.toSingleValueMap().get(FILE_FORM_DATA_NAME)))
                 .filter(FilePart.class::isInstance)
                 .cast(FilePart.class)
                 .switchIfEmpty(handleFileNotFound());

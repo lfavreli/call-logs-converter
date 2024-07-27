@@ -18,30 +18,31 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import fr.lfavreli.psc.domain.in.DocumentUseCasePort;
+import fr.lfavreli.psc.domain.api.CallLogUseCasePort;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @ExtendWith(MockitoExtension.class)
-class DocumentAdapterTest {
+class CallLogAdapterTest {
 
     @InjectMocks
-    private DocumentAdapter documentUseCases;
+    private CallLogAdapter callLogAdapter;
 
     @Mock
-    private DocumentUseCasePort documentUseCasePort;
+    private CallLogUseCasePort callLogUseCasePort;
 
     @Test
-    void testPostConvertDocument() {
+    void testPostConvertCallLogsToCsv() {
         // GIVEN
         MultiValueMap<String, Part> multipartData = new LinkedMultiValueMap<>();
-        multipartData.add("file", mock(FilePart.class));
-        ServerResponse expectedResponse = ServerResponse.ok().build().block();
+        multipartData.add(ParamConvertor.FILE_FORM_DATA_NAME, mock(FilePart.class));
+
         MockServerRequest serverRequest = MockServerRequest.builder().body(Mono.just(multipartData));
-        when(documentUseCasePort.convertToCsv(any())).thenReturn(Mono.just(expectedResponse));
+        ServerResponse expectedResponse = ServerResponse.ok().build().block();
+        when(callLogUseCasePort.convertToCsv(any())).thenReturn(Mono.just(expectedResponse));
 
         // WHEN
-        Mono<ServerResponse> response = documentUseCases.postConvertDocument(serverRequest);
+        Mono<ServerResponse> response = callLogAdapter.postConvertCallLogsToCsv(serverRequest);
 
         // THEN
         StepVerifier.create(response)
@@ -50,15 +51,16 @@ class DocumentAdapterTest {
     }
 
     @Test
-    void testGetDocumentStatus() {
+    void testGetCallLogsStatus() {
         // GIVEN
         UUID uuid = UUID.fromString("5b415c99-2e41-447a-8d56-e0161f3b49e3");
-        MockServerRequest mockServerRequest = MockServerRequest.builder().pathVariable("documentId", uuid.toString()).build();
+
+        MockServerRequest mockServerRequest = MockServerRequest.builder().pathVariable(ParamConvertor.CALL_LOG_ID_PATH_VAR, uuid.toString()).build();
         ServerResponse expectedResponse = ServerResponse.ok().build().block();
-        when(documentUseCasePort.checkConversionStatus(any())).thenReturn(Mono.just(expectedResponse));
+        when(callLogUseCasePort.checkConversionStatus(any())).thenReturn(Mono.just(expectedResponse));
 
         // WHEN
-        Mono<ServerResponse> response = documentUseCases.getDocumentStatus(mockServerRequest);
+        Mono<ServerResponse> response = callLogAdapter.getCallLogsStatus(mockServerRequest);
 
         // THEN
         StepVerifier.create(response)
@@ -67,15 +69,16 @@ class DocumentAdapterTest {
     }
 
     @Test
-    void testGetDownloadDocument() {
+    void testGetDownloadCallLogsInCsv() {
         // GIVEN
         UUID uuid = UUID.fromString("5b415c99-2e41-447a-8d56-e0161f3b49e3");
-        MockServerRequest mockServerRequest = MockServerRequest.builder().pathVariable("documentId", uuid.toString()).build();
+
+        MockServerRequest mockServerRequest = MockServerRequest.builder().pathVariable(ParamConvertor.CALL_LOG_ID_PATH_VAR, uuid.toString()).build();
         ServerResponse expectedResponse = ServerResponse.ok().build().block();
-        when(documentUseCasePort.downloadCsv(any())).thenReturn(Mono.just(expectedResponse));
+        when(callLogUseCasePort.downloadInCsv(any())).thenReturn(Mono.just(expectedResponse));
 
         // WHEN
-        Mono<ServerResponse> response = documentUseCases.getDownloadDocument(mockServerRequest);
+        Mono<ServerResponse> response = callLogAdapter.getDownloadCallLogsInCsv(mockServerRequest);
 
         // THEN
         StepVerifier.create(response)

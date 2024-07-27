@@ -7,14 +7,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import fr.lfavreli.psc.domain.document.model.DocumentEvent;
+import fr.lfavreli.psc.domain.model.CallLogEvent;
 import reactor.core.publisher.Sinks;
 
 @Configuration
 public class SharedResourcesConfig {
 
     @Bean
-    public Map<UUID, Sinks.One<DocumentEvent>> documentNotificationMap() {
+    public Map<UUID, Sinks.One<CallLogEvent>> callLogStatusMap() {
         return new ConcurrentHashMap<>();
     }
 

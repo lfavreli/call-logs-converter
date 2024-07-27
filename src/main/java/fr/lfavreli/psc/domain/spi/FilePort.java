@@ -1,4 +1,4 @@
-package fr.lfavreli.psc.domain.out;
+package fr.lfavreli.psc.domain.spi;
 
 import java.util.UUID;
 
