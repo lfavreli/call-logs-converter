@@ -1,37 +1,37 @@
-# 📄 Phone Statement Converter
+# 📞 Call Logs Converter
 
-Welcome to my Phone Statement Converter demo project! 
+Welcome to my Call Logs Converter demo project! 
 
-This application converts telephone statements in PDF format into CSV format, showcasing advanced Java and Spring ecosystem skills. It provides a robust and scalable solution with an intuitive API, offering three main endpoints for users to upload PDFs, check conversion status, and download the converted CSVs.
+This application converts call logs in PDF format into CSV format, showcasing advanced Java and Spring ecosystem skills. It provides a robust and scalable solution with an intuitive API, offering three main endpoints for users to upload PDFs, check conversion status, and download the converted CSVs.
 
 ## 📑 Endpoints
 
-### 1. Upload PDF Document
-- **Endpoint:** `/api/documents/`
+### 1. Upload PDF Call Logs
+- **Endpoint:** `/api/call-logs/`
 - **Method:** `POST`
-- **Description:** Upload a PDF telephone statement to be converted into CSV format.
+- **Description:** Upload a PDF call logs to be converted into CSV format.
 - **Request Body:** `form-data` with a key named `file` and the PDF as the value.
-- **Response:** the `documentId` to track the conversion status.
+- **Response:** the `callLogId` to track the conversion status.
 
 ### 2. Check Conversion Status
-- **Endpoint:** `/api/documents/{documentId}/status`
+- **Endpoint:** `/api/call-logs/{callLogId}/status`
 - **Method:** `GET`
-- **Description:** Check the conversion status of the uploaded document. Status can be `COMPLETED` or `FAILED`.
+- **Description:** Check the conversion status of the uploaded call logs. Status can be `COMPLETED` or `FAILED`.
 - **Response:** indicating the conversion status.
 
 ### 3. Download Converted CSV
-- **Endpoint:** `/api/documents/{documentId}/download`
+- **Endpoint:** `/api/call-logs/{callLogId}/download`
 - **Method:** `GET`
-- **Description:** Retrieve the converted document in CSV format.
-- **Response:** CSV file
+- **Description:** Retrieve the converted call logs in CSV format.
+- **Response:** the CSV file as a byte stream
 
-## 🛠️ How It Works
+## ⚙️ Workflow
 
-1. **Upload PDF**: User uploads a PDF via `/api/documents/`. The server processes the file asynchronously.
-2. **Conversion Status**: The user can check the conversion status by querying `/api/documents/{documentId}/status`.
-3. **Download CSV**: Once conversion is complete, the CSV can be downloaded from `/api/documents/{documentId}/download`.
+1. **Upload PDF**: Upload a PDF call log via `/api/call-logs/`, the server processes the file asynchronously.
+2. **Conversion Status**: Check the status of the conversion by querying `/api/call-logs/{callLogId}/status`.
+3. **Download CSV**: Retrieve the converted CSV file from `/api/call-logs/{callLogId}/download` after conversion.
 
-## 🧑‍💻 Skills and Technologies
+## 💻 Skills and Technologies
 
 ### Core Technologies
 
