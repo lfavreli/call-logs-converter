@@ -5,14 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.RouterFunctions.Builder;
+import org.springframework.web.reactive.function.server.ServerResponse;
 
 import fr.lfavreli.clc.application.CallLogAdapter;
-import fr.lfavreli.clc.utils.StringConstants;
-
-import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration(proxyBeanMethods = false)
 public class ApiRouterConfig {
+
+    private static final String ROOT_PATH = "";
 
     @Bean
     public RouterFunction<ServerResponse> apiRouter(CallLogAdapter callLogAdapter) {
@@ -23,7 +23,7 @@ public class ApiRouterConfig {
     }
 
     private Builder callLogsRouterBuilder(CallLogAdapter callLogAdapter, Builder builder) {
-        return builder.POST(StringConstants.EMPTY, callLogAdapter::postConvertCallLogsToCsv)
+        return builder.POST(ROOT_PATH, callLogAdapter::postConvertCallLogsToCsv)
                 .GET("/{callLogId}/status", callLogAdapter::getCallLogsStatus)
                 .GET("/{callLogId}/download", callLogAdapter::getDownloadCallLogsInCsv);
     }
