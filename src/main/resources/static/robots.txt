@@ -3,4 +3,5 @@ Allow: /
 
 Crawl-delay: 5
 
-Sitemap: http://exemple.com/sitemap.xml
+# TODO: Update when domain is ready
+# Sitemap: https://cycaas.com/sitemap.xml
