@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.reactive.function.server.RequestPredicate;
 import org.springframework.web.reactive.function.server.RequestPredicates;
@@ -14,20 +13,19 @@ import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration(proxyBeanMethods = false)
-public class SpaRouterConfig {
+public class StaticRouterConfig {
 
     private static final String STATIC_INDEX_HTML = "static/index.html";
 
     @Bean
-    @Profile("prod")
-    public RouterFunction<ServerResponse> spaRouter() {
+    public RouterFunction<ServerResponse> staticRouter() {
         ClassPathResource index = new ClassPathResource(STATIC_INDEX_HTML);
-        List<String> extensions = Arrays.asList("js", "css", "svg", "png", "jpg", "woff2", "json", "webmanifest");
-        RequestPredicate spaPredicate = RequestPredicates.path("/api/**")
+        List<String> extensions = Arrays.asList("js", "css", "svg", "png", "jpg", "woff2", "json", "webmanifest", "pdf");
+        RequestPredicate staticPredicate = RequestPredicates.path("/api/**")
                 .or(RequestPredicates.pathExtension(extensions::contains))
                 .negate();
 
-        return RouterFunctions.route().resource(spaPredicate, index).build();
+        return RouterFunctions.route().resource(staticPredicate, index).build();
     }
 
 }

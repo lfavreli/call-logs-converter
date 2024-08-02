@@ -34,7 +34,7 @@ public class DownloadCallLogService {
     private Mono<ServerResponse> fetchDocument(UUID documentId) {
         return filePort.readFile(filename(documentId))
                 .onErrorMap(ex -> handleFileReadingException(documentId, ex))
-                .flatMap(data -> createServerResponse(documentId, data));
+                .flatMap(data -> createServerResponse(data));
     }
 
     private ResponseStatusException handleFileReadingException(UUID documentId, Throwable ex) {
@@ -42,10 +42,10 @@ public class DownloadCallLogService {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to fetch file");
     }
 
-    private Mono<ServerResponse> createServerResponse(UUID documentId, byte[] data) {
+    private Mono<ServerResponse> createServerResponse(byte[] data) {
         return ServerResponse.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .header("Content-Disposition", "attachment; filename=" + filename(documentId))
+                .header("Content-Disposition", "attachment;") // filename=" + filename(documentId))
                 .bodyValue(data);
     }
 

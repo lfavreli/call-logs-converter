@@ -1,5 +1,6 @@
 package fr.lfavreli.clc.domain.service;
 
+import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 
@@ -48,6 +49,7 @@ public class ConvertorCallLogService {
 
     private void processFileAsync(FilePart filePart, UUID documentId, Sinks.One<CallLogEvent> sink) {
         filePort.fromPdfToCsv(documentId, filePart)
+                .delaySubscription(Duration.ofSeconds(1)) // Intentional addition of processing delays
                 .doOnSuccess(t -> notifyCompletion(documentId, sink, CallLogStatus.COMPLETED))
                 .doOnError(t -> notifyCompletion(documentId, sink, CallLogStatus.FAILED))
                 .subscribe();
