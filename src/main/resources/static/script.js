@@ -45,7 +45,7 @@ $(".hero-btn-convert").click(function () {
         let formData = new FormData();
         formData.append('file', document.file);
 
-        fetch('http://localhost:8080/api/call-logs', {
+        fetch('/api/call-logs', {
             method: 'POST',
             body: formData,
         })
@@ -67,7 +67,7 @@ $(".hero-btn-convert").click(function () {
 });
 
 function checkStatus(callLogId, csvFileName) {
-    const eventSource = new EventSource(`http://localhost:8080/api/call-logs/${callLogId}/status`);
+    const eventSource = new EventSource(`/api/call-logs/${callLogId}/status`);
     showLoader();
     eventSource.onmessage = function (event) {
         const data = JSON.parse(event.data);
@@ -80,7 +80,7 @@ function checkStatus(callLogId, csvFileName) {
             $('.download-link').removeClass('disabled');
 
             $('.download-link')
-                    .attr('href', `http://localhost:8080/api/call-logs/${callLogId}/download`)
+                    .attr('href', `/api/call-logs/${callLogId}/download`)
                     .attr('download', csvFileName);
         }
     };
