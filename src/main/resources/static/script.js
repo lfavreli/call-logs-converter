@@ -7,7 +7,7 @@ const pond = $('#dropzone').filepond({
     allowMultiple: false,
     allowReplace: false,
     maxFiles: 1,
-    maxFileSize: '20MB',
+    maxFileSize: '5MB',
     acceptedFileTypes: ['application/pdf'],
     instantUpload: false,
     labelIdle: `
@@ -39,49 +39,43 @@ $('#dropzone').on('FilePond:removefile', function (e) {
 });
 
 $(".hero-btn-convert").click(function () {
-
     const document = $('#dropzone').filepond('getFile', 0);
     if (document && document.id && document.file) {
+
+        const callLogName = getFilenameWithoutExtension(document.file.name);
+        const csvFileName = callLogName + ".csv";
+        $('.file-info-label').text(csvFileName);
+        showLoader();
+        showResult();
+
         let formData = new FormData();
         formData.append('file', document.file);
 
-        fetch('/api/call-logs', {
-            method: 'POST',
-            body: formData,
-        })
+        fetch('/api/call-logs', { method: 'POST', body: formData })
             .then(response => response.text())
-            .then(callLogId => {
-                const callLogName = getFilenameWithoutExtension(document.file.name);
-                const csvFileName = callLogName + ".csv";
-                checkStatus(callLogId, csvFileName);
-                $('.file-info-label').text(csvFileName);
-                showResult();
-            }).catch(error => {
+            .then(callLogId => checkStatus(callLogId, csvFileName))
+            .catch(error => {
                 console.error(error);
                 alert("Failed to convert file: replace it or contact us 👋");
             });
-
     } else {
-        alert("Please select a file");
+        alert("Please select a file!");
     }
 });
 
 function checkStatus(callLogId, csvFileName) {
     const eventSource = new EventSource(`/api/call-logs/${callLogId}/status`);
-    showLoader();
     eventSource.onmessage = function (event) {
         const data = JSON.parse(event.data);
         const { callLogStatus } = data;
         if (callLogStatus === 'COMPLETED') {
-            console.log("Conversion completed!", '<---- "Conversion completed!"');;
             eventSource.close();
             showRemove();
             showDone();
-            $('.download-link').removeClass('disabled');
-
             $('.download-link')
-                    .attr('href', `/api/call-logs/${callLogId}/download`)
-                    .attr('download', csvFileName);
+                .attr('href', `/api/call-logs/${callLogId}/download`)
+                .attr('download', csvFileName)
+                .removeClass('disabled');
         }
     };
 
@@ -97,7 +91,6 @@ function getFilenameWithoutExtension(filename) {
     if (lastDotIndex === -1) return filename; // No extension found
     return filename.substring(0, lastDotIndex);
 }
-
 
 function showLoader() {
     $('.loader-icon').removeClass('hide').addClass('show');
