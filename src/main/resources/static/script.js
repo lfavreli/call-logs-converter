@@ -17,25 +17,25 @@ const pond = $('#dropzone').filepond({
             <p class="filepond--label-idle-txt-2">Supported file format: PDF<br>Max file size: 5MB</p>
         </div>
     `,
-    credits: false
-});
-
-// Remove Skeleton when FilePond is initialized and show hero section
-$('#dropzone').on('FilePond:init', function (e) {
-    $('.skeleton').remove();
-    $('.hero').css("display", "flex");
-});
-
-// Show convert button when file is added
-$('#dropzone').on('FilePond:addfile', function (e) {
-    $(".hero-btn-convert").css("display", "block");
-    $('.hero').css("height", "150px");
-});
-
-// Hide convert button when file is removed
-$('#dropzone').on('FilePond:removefile', function (e) {
-    $(".hero-btn-convert").css("display", "none");
-    $('.hero').css("height", "200px");
+    credits: false,
+    oninit: () => {
+        // Remove Skeleton when FilePond is initialized and show hero section
+        $('.skeleton').remove();
+        $('.hero').css("display", "flex");
+    },
+    onaddfile: (error, _file) => {
+        if (error) {
+            console.error('An error occured during the addfile event:', error);
+        } else {
+            $(".hero-btn-convert").removeClass("disabled").removeAttr("disabled");
+        }
+        $(".hero-btn-convert").css("display", "block");
+        $('.hero').css("height", "150px");
+    },
+    onremovefile: (_error, _file) => {
+        resetBtnConvert();
+        $('.hero').css("height", "200px");
+    }
 });
 
 $(".hero-btn-convert").click(function () {
@@ -72,7 +72,7 @@ function checkStatus(callLogId, csvFileName) {
             eventSource.close();
             showRemove();
             showDone();
-            $('.download-link')
+            $('.download-btn')
                 .attr('href', `/api/call-logs/${callLogId}/download`)
                 .attr('download', csvFileName)
                 .removeClass('disabled');
@@ -129,7 +129,12 @@ $('.remove-icon-area').click(function () {
 });
 
 function resetDownloadButton() {
-    $('.download-btn').addClass('disabled');
-    $('.download-link').removeAttr('href');
-    $('.download-link').removeAttr('download');
+    $('.download-btn').addClass('disabled')
+        .removeAttr('href')
+        .removeAttr('download');
+}
+
+function resetBtnConvert() {
+    $(".hero-btn-convert").css("display", "none");
+    $(".hero-btn-convert").addClass("disabled").attr("disabled", "disabled");
 }

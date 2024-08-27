@@ -158,10 +158,20 @@ main {
     width: calc(100% - 1.25em - 10px);
     margin-bottom: 1em;
     border-radius: 0.5em;
-}
 
-.hero-btn-convert:hover {
-    background-color: #AB3341;
+    &.disabled {
+        background-color: #F2CFD4;
+        cursor: not-allowed;
+        color: #ABABAB;
+
+        &:hover {
+            background-color: #F2CFD4;
+        }
+    }
+
+    &:hover {
+        background-color: #AB3341;
+     }
 }
 
 .result {
@@ -299,17 +309,13 @@ main {
 }
 
 .row-action-block {
-    position:absolute;
+    position: absolute;
     justify-content: flex-end;
     width: calc(100% - 44px);
     height: 100%;
     margin-left: 44px;
     border-top-right-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
-}
-
-.download-link {
-    text-decoration: none;
 }
 
 .download-btn {
@@ -319,7 +325,8 @@ main {
     justify-content: center;
     align-items: center;
     height: 44px;
-    background-color: #C83E4D;;
+    background-color: #C83E4D;
+    text-decoration: none;
     font-size: 1.1rem;
     user-select: none;
     width: calc(100% - 1.25em - 10px);
