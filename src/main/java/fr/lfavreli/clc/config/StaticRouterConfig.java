@@ -16,7 +16,8 @@ import reactor.core.publisher.Mono;
 @Configuration(proxyBeanMethods = false)
 public class StaticRouterConfig {
 
-    private static final String STATIC_INDEX_HTML = "static/index.html";
+    private static final String STATIC_FOLDER = "static/";
+    private static final String INDEX_HTML = "index.html";
 
     /**
      * Returns a router function that serves static resources from the 'static' directory.
@@ -28,7 +29,7 @@ public class StaticRouterConfig {
      */
     @Bean
     public RouterFunction<ServerResponse> staticRouter() {
-        return RouterFunctions.resources("/**", new ClassPathResource("static/"))
+        return RouterFunctions.resources("/**", new ClassPathResource(STATIC_FOLDER))
                 .andRoute(RequestPredicates.GET("/"), this::indexHandler)
                 .andRoute(RequestPredicates.GET("/**"), this::redirectToIndex);
     }
@@ -37,7 +38,7 @@ public class StaticRouterConfig {
      * @param serverRequest (unused)
      */
     private Mono<ServerResponse> indexHandler(ServerRequest serverRequest) {
-        return ServerResponse.ok().bodyValue(new ClassPathResource(STATIC_INDEX_HTML));
+        return ServerResponse.ok().bodyValue(new ClassPathResource(STATIC_FOLDER + INDEX_HTML));
     }
 
     /**
