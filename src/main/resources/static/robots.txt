@@ -3,5 +3,4 @@ Allow: /
 
 Crawl-delay: 5
 
-# TODO: Update when domain is ready
-# Sitemap: https://cycaas.com/sitemap.xml
+Sitemap: https://call-logs-converter.com/sitemap.xml
