@@ -24,14 +24,16 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
 import fr.lfavreli.clc.application.CallLogAdapter;
-import fr.lfavreli.clc.config.ApiRouterConfig;
+import fr.lfavreli.clc.config.RouterConfig;
 
 @SpringBootTest(classes = CallLogsConverterApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
 class CallLogsConverterApplicationTest {
 
+    private static final String SAMPLE_CALL_LOG_PATH = "static/sample-call-log.pdf";
+
     @Autowired
-    private ApiRouterConfig apiRouterConfig;
+    private RouterConfig routerConfig;
 
     @Autowired
     private CallLogAdapter callLogAdapter;
@@ -49,11 +51,11 @@ class CallLogsConverterApplicationTest {
     @Test
     @Order(1)
     void testPostConvertDocument() {
-        ClassPathResource pdf = new ClassPathResource("sample-call-log.pdf");
+        ClassPathResource pdf = new ClassPathResource(SAMPLE_CALL_LOG_PATH);
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("file", pdf, MediaType.APPLICATION_PDF);
 
-        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(callLogAdapter))
+        WebTestClient.bindToRouterFunction(routerConfig.router(callLogAdapter))
                 .build()
                 .post()
                 .uri("/api/call-logs")
@@ -70,7 +72,7 @@ class CallLogsConverterApplicationTest {
     @Test
     @Order(2)
     void testGetDocumentStatus() {
-        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(callLogAdapter))
+        WebTestClient.bindToRouterFunction(routerConfig.router(callLogAdapter))
                 .build()
                 .get()
                 .uri("/api/call-logs/" + callLogId + "/status")
@@ -86,7 +88,7 @@ class CallLogsConverterApplicationTest {
     @Test
     @Order(3)
     void testGetDownloadDocument() {
-        WebTestClient.bindToRouterFunction(apiRouterConfig.apiRouter(callLogAdapter))
+        WebTestClient.bindToRouterFunction(routerConfig.router(callLogAdapter))
                 .build()
                 .get()
                 .uri("/api/call-logs/" + callLogId + "/download")
