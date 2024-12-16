@@ -1,0 +1,10 @@
+[build]
+builder = "DOCKERFILE"
+watchPatterns=["/**"]
+
+[deploy]
+# healthcheckPath = "/health"
+# healthcheckTimeout = 30 # seconds
+numReplicas = 1
+restartPolicyType = "ON_FAILURE" # ON_FAILURE | ALWAYS | NEVER
+restartPolicyMaxRetries = 3
